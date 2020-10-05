@@ -5,11 +5,14 @@ import store from '../store'
 import login from '@/views/login'
 import Home from '@/views/Home'
 
-Vue.use(router)
-const originalPush = router.prototype.push
+Vue.use(router);
+const originalPush = router.prototype.push;
 router.prototype.push = function push (location) {
     return originalPush.call(this, location).catch(err => err)
-}
+};
+
+const WhiteListRouter = ['/login', 'notFound'];
+
 export const staticRoutes = [
     {
         path: '/',
@@ -42,14 +45,49 @@ const createRouter = (routes) => new router({
 });
 
 export function resetRouter() {
-    store.dispatch("initMenus")
+    store.dispatch("initMenus");
     staticRoutes[0].children = store.getters.menus;
     const newRouter = createRouter(staticRoutes);
     yanRouter.matcher = newRouter.matcher;
 }
 
-store.dispatch("initMenus")
-staticRoutes[0].children = store.getters.menus;
+function checkLogin(isLogin) {
+    if (!isLogin) { // 未登录设置路由
+        resetRouter();
+        store.commit('updateLoginStatus');
+    }
+}
+
 const yanRouter = createRouter(staticRoutes);
+
+yanRouter.beforeEach((to, from, next) => {
+    let user = store.getters.userInfo;
+    let token = store.getters.token;
+    let actor = store.getters.actor;
+    let isLogin = store.getters.isLogin;
+    var hasAuth = user !== null && token != null && actor !== null && user !== undefined && token !== undefined && actor !== undefined;
+
+    if (to.path == '/login') {
+        if (hasAuth) {
+            checkLogin(isLogin);
+            next({path: '/'});
+        }else {
+            next();
+        }
+    }else {
+        if (!hasAuth) {
+            if (WhiteListRouter.indexOf(to.path) !== -1) {
+                next();
+            }else {
+                next( {
+                    path: '/login',
+                })
+            }
+        }else {
+            checkLogin(isLogin);
+            next();
+        }
+    }
+});
 
 export default yanRouter;

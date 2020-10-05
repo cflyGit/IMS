@@ -11,12 +11,18 @@
 
                 <a-form id="form-login" :form="form" class="login-form" @submit="handleSubmit">
                     <a-form-item>
-                        <a-select defaultValue="admin" @change="handleSelectChange">
+                        <a-select defaultValue="admin" @change="handleSelectChange" v-decorator="['actor', {valuePropName: 'actor',initialValue: 'admin',}]">
                             <a-select-option value="admin">
                                 管理员
                             </a-select-option>
-                            <a-select-option value="user">
-                                用户
+                            <a-select-option value="tutor">
+                                导师
+                            </a-select-option>
+                            <a-select-option value="student">
+                                学生
+                            </a-select-option>
+                            <a-select-option value="base">
+                                基地
                             </a-select-option>
                         </a-select>
                     </a-form-item>
@@ -56,6 +62,8 @@
 <script>
     import logoImg from "@/assets/img/logo.png"
     import cloudImg from '@/assets/icon/cloud.png'
+    import {login} from '@/api/login'
+
     export default {
         name: "login",
 
@@ -63,6 +71,12 @@
             return {
                 logo: logoImg,
                 cloud: cloudImg,
+
+                loginForm: {
+                    actors: 'admin',
+                    username: '账号',
+                    password: '密码',
+                }
             }
         },
 
@@ -75,7 +89,25 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        console.log('Received values of form: ', values);
+                        // if(values.user === "admin" && values.password === "12345") {
+                        //     this.$router.push('/index')
+                        // }
+
+                        login(values).then(res => {
+                            this.$store.commit('setUserInfo', res.data);
+                            this.$message({
+                                type: 'success',
+                                message: '登录成功',
+                                duration: 800,
+                            });
+                            this.$router.push("/");
+                        });
+                    }else { //登录失败
+                        this.$message({
+                            type: 'error',
+                            message: '用户名或密码错误',
+                            showClose: true
+                        })
                     }
                 });
             },

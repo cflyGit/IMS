@@ -25,7 +25,7 @@ function filterAsyncRoutes(routes, roles) {
     return res;
 }
 
-const layout = {
+const main = {
     state: {
         route_tree: [
             {
@@ -193,6 +193,13 @@ const layout = {
         collapse: false,
         menus: [],
         breads: ['index'],
+        actor2roles: {'admin': 1, 'tutor': 2, 'base': 3, 'student': 4, 'default': 999},
+
+        userInfo: null,
+        token: null,
+        actor: null,
+
+        isLogin: false,
 
         menu_dict: {'index': '首页',
             'user': '用户管理',
@@ -214,14 +221,68 @@ const layout = {
         menus: state => state.menus,
         breads: state=> state.breads,
         menu_dict: state => state.menu_dict,
+        isLogin: state => state.isLogin,
+
+        actor: state => {
+            if (state.actor == null) {
+                let sessionActor = sessionStorage.getItem('actor');
+                if (sessionActor != null) {
+                    state.actor = JSON.parse(sessionActor);
+                    return sessionActor;
+                }else {
+                    let localActor = localStorage.getItem('actor');
+                    if (localActor != null) {
+                        state.actor = localStorage('actor');
+                    }
+                    return localActor;
+                }
+            }
+            return state.actor;
+        },
+
+        userInfo: state => {
+            if (state.userInfo == null) {
+                let sessionUser = sessionStorage.getItem('user');
+                if (sessionUser != null) {
+                    state.userInfo = JSON.parse(sessionUser);
+                    return sessionUser
+                }else {
+                    let localeUser = localStorage.getItem('user');
+                    if (localeUser != null) {
+                        state.userInfo = JSON.parse(localeUser);
+                    }
+                    return localeUser;
+                }
+            }
+            return state.userInfo;
+        },
+
+        token: state => {
+            if (state.token == null) {
+                let sessionToken = sessionStorage.getItem('token');
+                if (sessionToken != null) {
+                    state.token = sessionToken;
+                    return sessionToken;
+                }else {
+                    let localeToken = localStorage.getItem('token');
+                    state.token = localeToken;
+                    return localeToken;
+                }
+            }
+            return state.token;
+        },
     },
 
     mutations: {
+        updateLoginStatus(state) {
+            state.isLogin = !state.isLogin;
+        },
+
         menuFold(state) {
             state.collapse = !state.collapse;
         },
 
-        UPDATE_BREAD:(state, to) => {
+        updateBread:(state, to) => {
             let res = to.split('/');
             for (let i = 0; i < res.length; i++) {
                 if (res[i] == "") {
@@ -231,21 +292,59 @@ const layout = {
             state.breads = res;
         },
 
-        UPDATE_MENUS: (state, menus) => {
+        updateMenus: (state, menus) => {
             state.menus = menus;
+        },
+
+        setToken(state, token, flag = true) {
+            if (flag) {
+                localStorage.setItem('token', token)
+            }else {
+                sessionStorage.setItem('token', token)
+            }
+        },
+
+        setActor(state, actor, flag=true) {
+            if (flag) {
+                localStorage.setItem('actor', actor)
+            }else {
+                sessionStorage.setItem('actor', actor)
+            }
+        },
+
+        setUserInfo(state, userInfo, flag=true) {
+            state.userInfo = userInfo;
+            state.token = userInfo.token;
+            if (flag) {
+                localStorage.setItem('user', JSON.stringify(userInfo))
+            }else {
+                sessionStorage.setItem('user', JSON.stringify(userInfo))
+            }
+            state.commit('setToken', userInfo.token, flag);
+            state.commit('setActor', userInfo.actor, flag);
+        },
+
+        logout(state) {
+            state.userInfo = null;
+            state.token = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
         }
     },
 
     actions: {
         initMenus: ({commit, state}) => {
-            const menu = filterAsyncRoutes(state.route_tree, 1);
+            // console.log(state);
+            const menu = filterAsyncRoutes(state.route_tree, state.actor);
             if (menu !== undefined) {
-                commit('UPDATE_MENUS', menu);
+                commit('updateMenus', menu);
             }
         },
 
         changeMenus: ({commit}, menus) => {
-            commit('UPDATE_MENUS', menus);
+            commit('updateMenus', menus);
             resetRouter();
             yanRouter.push('/');
         },
@@ -253,4 +352,4 @@ const layout = {
 
 };
 
-export default layout
+export default main
