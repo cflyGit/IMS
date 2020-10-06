@@ -21,11 +21,12 @@ function filterAsyncRoutes(routes, roles) {
             res.push(r);
         }
     });
-
+    // console.log("res:");
+    // console.log(res);
     return res;
 }
 
-const main = {
+const imsMain = {
     state: {
         route_tree: [
             {
@@ -199,8 +200,6 @@ const main = {
         token: null,
         actor: null,
 
-        isLogin: false,
-
         menu_dict: {'index': '首页',
             'user': '用户管理',
             'student': '学生管理',
@@ -221,7 +220,7 @@ const main = {
         menus: state => state.menus,
         breads: state=> state.breads,
         menu_dict: state => state.menu_dict,
-        isLogin: state => state.isLogin,
+        actor2roles: state => state.actor2roles,
 
         actor: state => {
             if (state.actor == null) {
@@ -232,7 +231,7 @@ const main = {
                 }else {
                     let localActor = localStorage.getItem('actor');
                     if (localActor != null) {
-                        state.actor = localStorage('actor');
+                        state.actor = localStorage.getItem('actor');
                     }
                     return localActor;
                 }
@@ -312,18 +311,6 @@ const main = {
             }
         },
 
-        setUserInfo(state, userInfo, flag=true) {
-            state.userInfo = userInfo;
-            state.token = userInfo.token;
-            if (flag) {
-                localStorage.setItem('user', JSON.stringify(userInfo))
-            }else {
-                sessionStorage.setItem('user', JSON.stringify(userInfo))
-            }
-            state.commit('setToken', userInfo.token, flag);
-            state.commit('setActor', userInfo.actor, flag);
-        },
-
         logout(state) {
             state.userInfo = null;
             state.token = null;
@@ -335,21 +322,36 @@ const main = {
     },
 
     actions: {
-        initMenus: ({commit, state}) => {
-            // console.log(state);
-            const menu = filterAsyncRoutes(state.route_tree, state.actor);
+        initMenus: ({commit, state}, actor) => {
+            const menu = filterAsyncRoutes(state.route_tree, actor);
+            // console.log(menu);
             if (menu !== undefined) {
                 commit('updateMenus', menu);
             }
         },
 
-        changeMenus: ({commit}, menus) => {
-            commit('updateMenus', menus);
-            resetRouter();
-            yanRouter.push('/');
+        changeMenus: ({commit, state}, actor) => {
+            const menu = filterAsyncRoutes(state.route_tree, actor);
+            if (menu !== undefined) {
+                commit('updateMenus', menu);
+                resetRouter();
+                yanRouter.push('/');
+            }
+        },
+
+        setUserInfo({commit, state}, userInfo, flag=true) {
+            state.userInfo = userInfo;
+            state.token = userInfo.token;
+            if (flag) {
+                localStorage.setItem('user', JSON.stringify(userInfo))
+            }else {
+                sessionStorage.setItem('user', JSON.stringify(userInfo))
+            }
+            commit('setToken', userInfo.token, flag);
+            commit('setActor', userInfo.actor, flag);
         },
     }
 
 };
 
-export default main
+export default imsMain

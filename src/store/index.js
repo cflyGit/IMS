@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import main from './modules/main'
+import imsMain from './modules/imsMain'
 import student from './modules/student'
 import tutor from './modules/tutor'
 import projects from './modules/projects'
@@ -11,7 +11,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules:{
-        main,
+        imsMain,
         student,
         tutor,
         projects,

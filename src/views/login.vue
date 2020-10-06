@@ -62,7 +62,7 @@
 <script>
     import logoImg from "@/assets/img/logo.png"
     import cloudImg from '@/assets/icon/cloud.png'
-    import {login} from '@/api/login'
+    // import {login} from '@/api/login'
 
     export default {
         name: "login",
@@ -89,19 +89,19 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        // if(values.user === "admin" && values.password === "12345") {
-                        //     this.$router.push('/index')
-                        // }
+                        if(values.user === "admin" && values.password === "12345") {
 
-                        login(values).then(res => {
-                            this.$store.commit('setUserInfo', res.data);
-                            this.$message({
-                                type: 'success',
-                                message: '登录成功',
-                                duration: 800,
-                            });
-                            this.$router.push("/");
-                        });
+                            let data = {
+                                'user': values.user,
+                                'token': values.password,
+                                'actor': values.actor,
+                            };
+                            // login(values).then(res => {
+                            this.$store.dispatch('setUserInfo', data);
+                            this.$store.dispatch('changeMenus', this.$store.getters.actor2roles[this.$store.getters.actor]);
+                            this.$message.success("登录成功！");
+                        }
+                        // });
                     }else { //登录失败
                         this.$message({
                             type: 'error',

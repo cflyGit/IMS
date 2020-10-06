@@ -39,7 +39,7 @@
                     // console.log("to:" + toPath);
                     this.$router.push(toPath);
                     // 更新bread
-                    this.$store.commit('UPDATE_BREAD', toPath);
+                    this.$store.commit('updateBread', toPath);
                 }
             }
         },

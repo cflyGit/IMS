@@ -11,7 +11,7 @@ router.prototype.push = function push (location) {
     return originalPush.call(this, location).catch(err => err)
 };
 
-const WhiteListRouter = ['/login', 'notFound'];
+export const WhiteListRouter = ['/login', 'notFound'];
 
 export const staticRoutes = [
     {
@@ -45,31 +45,33 @@ const createRouter = (routes) => new router({
 });
 
 export function resetRouter() {
-    store.dispatch("initMenus");
     staticRoutes[0].children = store.getters.menus;
     const newRouter = createRouter(staticRoutes);
     yanRouter.matcher = newRouter.matcher;
 }
 
-function checkLogin(isLogin) {
-    if (!isLogin) { // 未登录设置路由
-        resetRouter();
-        store.commit('updateLoginStatus');
-    }
-}
-
-const yanRouter = createRouter(staticRoutes);
-
-yanRouter.beforeEach((to, from, next) => {
+function getAuth() {
     let user = store.getters.userInfo;
     let token = store.getters.token;
     let actor = store.getters.actor;
-    let isLogin = store.getters.isLogin;
     var hasAuth = user !== null && token != null && actor !== null && user !== undefined && token !== undefined && actor !== undefined;
 
+    return hasAuth;
+}
+
+let auth = getAuth();
+if (auth) {
+    let actor = store.getters.actor2roles[store.getters.actor];
+    store.dispatch("initMenus", actor);
+    staticRoutes[0].children = store.getters.menus;
+}
+const yanRouter = createRouter(staticRoutes);
+
+yanRouter.beforeEach((to, from, next) => {
+    let hasAuth = getAuth();
+    // store.commit('logout');
     if (to.path == '/login') {
         if (hasAuth) {
-            checkLogin(isLogin);
             next({path: '/'});
         }else {
             next();
@@ -84,7 +86,6 @@ yanRouter.beforeEach((to, from, next) => {
                 })
             }
         }else {
-            checkLogin(isLogin);
             next();
         }
     }
