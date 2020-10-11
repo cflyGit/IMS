@@ -2,16 +2,20 @@
     <section class="individual-section">
         <h3 style="color: dodgerblue">单个学生信息录入</h3>
 
-        <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form :form="form" :label-col="labelCol" :wrapper-col="wrapperCol" @submit="handleSubmit">
             <template v-for="(item, index) in st_columns">
                 <a-form-item  :key=index :label=item.title v-if=item.enroll>
-                    <a-input v-decorator="[item.title, { rules: [{ required: item.require, message: item.title+'不能为空' }] },]" :placeholder=item.title />
+                    <a-input v-decorator="[item.dataIndex, { rules: [{ required: item.require, message: item.title+'不能为空' }] },]" :placeholder=item.title />
                 </a-form-item>
             </template>
 
+            <a-form-item label="密码">
+                <a-input v-decorator="['password', {valueProName: 'password', initialValue: '123456'}]"/>
+            </a-form-item>
+
             <a-form-item label="学院">
-                <a-select :default-value=st_academy_list[0]>
-                    <a-select-option v-for="(item, index) in st_academy_list" :key="item" :value="index">
+                <a-select :defaultValue=st_academy_list[0] v-decorator="['academy', {valuePropName: 'academy',initialValue: '计算机学院',}]">
+                    <a-select-option v-for="item in st_academy_list" :key=item :value=item>
                         {{item}}
                     </a-select-option>
                 </a-select>
@@ -32,6 +36,8 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import {getTime} from '@/store/modules/getTime';
+    import {insert} from '@/api/user';
 
     export default {
         name: "studentIndividual",
@@ -60,12 +66,25 @@
             ]),
         },
         methods: {
-            submit() {
-
+            handleSubmit(e) {
+                e.preventDefault();
+                this.form.validateFields((err, values) => {
+                    if (!err) {
+                        values.register_time = getTime("yyyy-MM-dd hh:mm:ss");
+                        insert("student", values).then(res=>{
+                            if (res.data.code === 200) {
+                                this.$message.success("提交成功");
+                                this.handleReset();
+                            }else {
+                                this.$message.error(res.data.msg);
+                            }
+                        })
+                    }
+                })
             },
 
             handleReset(){
-
+                this.form.resetFields();
             },
         }
     }

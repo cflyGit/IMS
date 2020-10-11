@@ -3,7 +3,7 @@ const tutor={
         tt_columns: [
             {
                 title: '教工号',
-                dataIndex: 'id',
+                dataIndex: 'tutor_id',
                 require: true,
                 enroll: true,
             },
@@ -58,8 +58,8 @@ const tutor={
             },
             {
                 title: '注册时间',
-                dataIndex: 'time',
-                scopedSlots: {customRender: 'time'},
+                dataIndex: 'register_time',
+                scopedSlots: {customRender: 'register_time'},
                 require: false,
                 enroll: false,
             },
@@ -73,7 +73,10 @@ const tutor={
         ],
         tt_edit: ['name', 'academy', 'age', 'phone', 'qq', 'wechat', 'email'],
         tt_search: ['教工号','姓名', '学院', '年龄', '电话', 'QQ', '微信', '邮箱'],
+        tt_search_en: ['Id', 'Name', 'Academy', 'Age', 'Phone', 'QQ', 'Wechat', 'Email'],
         tt_academy_list: ['计算机学院', '网络安全学院', '数字媒体与技术', '数学学院'],
+
+        tt_table_data: [],
     },
 
     getters: {
@@ -81,7 +84,25 @@ const tutor={
         tt_edit: state => state.tt_edit,
         tt_academy_list: state => state.tt_academy_list,
         tt_search: state => state.tt_search,
+        tt_search_en: state => state.tt_search_en,
+        tt_table_data: state => state.tt_table_data,
     },
+
+    mutations: {
+        tt_update_table_data(state, data) {
+            state.tt_table_data = data;
+        },
+
+        splice_table_data(state, index) {
+            state.tt_table_data.splice(index, 1);
+        },
+    },
+
+    actions:{
+        tt_splice_table_data({commit}, index) {
+            commit('splice_table_data', index);
+        }
+    }
 };
 
 export default tutor;

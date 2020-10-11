@@ -7,10 +7,12 @@ const headers = {
     'Content-Type': 'application/json;charset=utf-8',
 };
 
+export let baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8989' : 'http://localhost:8989';
+
 // create axios instance
 let request = axios.create( {
     headers: headers,
-    baseURL: process.env.NODE_ENV === 'development' ? 'localhost:8989' : '',
+    baseURL: baseUrl,
     timeout: 2500
 })
 

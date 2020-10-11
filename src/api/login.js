@@ -1,9 +1,9 @@
 import request from '@/config/request'
 
-export function login(params) {
+export function login(actor, params) {
     return request ({
-        url: '/login',
-        method: 'get',
+        url: '/' + actor + '/login',
+        method: 'post',
         data: params
     })
 }

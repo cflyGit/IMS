@@ -5,12 +5,7 @@
                 @click="menuFold"
                 class="trigger"
         />
-<!--        <a-breadcrumb>-->
-<!--            <a-breadcrumb-item>Home</a-breadcrumb-item>-->
-<!--            <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>-->
-<!--            <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>-->
-<!--            <a-breadcrumb-item>An Application</a-breadcrumb-item>-->
-<!--        </a-breadcrumb>-->
+
         <yan-bread></yan-bread>
 
         <div class="header-right-wrapper">
@@ -21,7 +16,7 @@
                 <a-icon type="notification" />
             </a-badge>
             <a-popover placement="bottom" trigger="click">
-<!--                <a @click="reset" slot="content">Reset Permission</a>-->
+                <a @click="logout" slot="content">退出登录</a>
                 <a-avatar class="avatar" icon="user" style="backgroundColor:#4397f8"/>
             </a-popover>
         </div>
@@ -48,7 +43,12 @@ export default {
     methods: {
         menuFold() {
             this.$store.commit('menuFold');
-        }
+        },
+
+        logout() {
+            this.$store.commit('logout');
+            this.$router.push('/login');
+        },
     },
 }
 </script>

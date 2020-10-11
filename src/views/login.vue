@@ -28,18 +28,19 @@
                     </a-form-item>
                     <a-form-item>
                         <a-input
-                                v-decorator="['user',{ rules: [{ required: true, message: '请输入账号!' }] },]" placeholder="账号">
+                                v-decorator="['id',{ rules: [{ required: true, message: '请输入账号!' }] },]" placeholder="账号">
                             <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)"/>
                         </a-input>
                     </a-form-item>
                     <a-form-item>
-                        <a-input v-decorator="['password',{ rules: [{ required: true, message: '请输入密码!' }] },]" type="password" placeholder="密码">
+                        <a-input
+                                v-decorator="['password',{ rules: [{ required: true, message: '请输入密码!' }] },]" type="password" placeholder="密码">
                             <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)"/>
                         </a-input>
                     </a-form-item>
                     <a-form-item>
                         <a-checkbox v-decorator="['remember',{valuePropName: 'checked',initialValue: true,},]">
-                            记住密码
+                            下次自动登录
                         </a-checkbox>
                         <a class="login-form-forgot" href="">
                             忘记密码
@@ -62,7 +63,7 @@
 <script>
     import logoImg from "@/assets/img/logo.png"
     import cloudImg from '@/assets/icon/cloud.png'
-    // import {login} from '@/api/login'
+    import {login} from '@/api/login'
 
     export default {
         name: "login",
@@ -73,8 +74,7 @@
                 cloud: cloudImg,
 
                 loginForm: {
-                    actors: 'admin',
-                    username: '账号',
+                    id: '账号',
                     password: '密码',
                 }
             }
@@ -89,27 +89,24 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        if(values.user === "admin" && values.password === "12345") {
-
-                            let data = {
-                                'user': values.user,
-                                'token': values.password,
-                                'actor': values.actor,
-                            };
-                            // login(values).then(res => {
-                            this.$store.dispatch('setUserInfo', data);
-                            this.$store.dispatch('changeMenus', this.$store.getters.actor2roles[this.$store.getters.actor]);
-                            this.$message.success("登录成功！");
-                        }
-                        // });
-                    }else { //登录失败
-                        this.$message({
-                            type: 'error',
-                            message: '用户名或密码错误',
-                            showClose: true
-                        })
+                        let data = {
+                            'user': values.id,
+                            'token': values.password,
+                            'actor': values.actor,
+                        };
+                        this.loginForm.id = values.id;
+                        this.loginForm.password = values.password;
+                        login(values.actor, this.loginForm).then(res => {
+                            if (res.data.code === 200) {
+                                this.$store.dispatch('setUserInfo', data);
+                                this.$store.dispatch('changeMenus', this.$store.getters.actor2roles[this.$store.getters.actor]);
+                                this.$message.success("登陆成功！");
+                            }else {
+                                this.$message.error(res.data.msg);
+                            }
+                        });
                     }
-                });
+                })
             },
 
             handleSelectChange() {

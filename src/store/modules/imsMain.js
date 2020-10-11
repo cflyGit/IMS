@@ -21,8 +21,6 @@ function filterAsyncRoutes(routes, roles) {
             res.push(r);
         }
     });
-    // console.log("res:");
-    // console.log(res);
     return res;
 }
 
@@ -198,7 +196,7 @@ const imsMain = {
 
         userInfo: null,
         token: null,
-        actor: null,
+        actor: 'admin',
 
         menu_dict: {'index': '首页',
             'user': '用户管理',

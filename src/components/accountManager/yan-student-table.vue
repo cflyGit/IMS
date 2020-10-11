@@ -8,7 +8,7 @@
                     {{ `已选中 ${selectedRowKeys.length} 条记录` }}
                 </span>
             </div>
-            <a-table :row-selection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :columns=st_columns :data-source="data" bordered>
+            <a-table :row-selection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}" :columns=st_columns :data-source="st_table_data" bordered>
                 <template v-for="col in st_edit" :slot="col" slot-scope="text, record">
                     <div :key="col">
                         <a-input
@@ -43,33 +43,32 @@
 </template>
 
 <script>
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-        data.push({
-            key: i.toString(),
-            id: `${i}`,
-            name: `Edrward ${i}`,
-            age: 32,
-            academy: `ee`,
-            tutor: `LiMing`,
-            phone: `11411411411`,
-            qq: `2535682466`,
-            wechat: `cfly`,
-            email: `cfly@bupt.com`,
-            time: `2020-10-1`,
-        });
-    }
+    // const data = [];
+    // for (let i = 0; i < 100; i++) {
+    //     data.push({
+    //         key: i.toString(),
+    //         student_id: `${i}`,
+    //         name: `Edrward ${i}`,
+    //         age: 32,
+    //         academy: `ee`,
+    //         tutor: `LiMing`,
+    //         phone: `11411411411`,
+    //         qq: `2535682466`,
+    //         wechat: `cfly`,
+    //         email: `cfly@bupt.com`,
+    //         time: `2020-10-1`,
+    //     });
+    // }
 
     import {mapGetters} from 'vuex';
     import yanStudentSearch from "@/components/accountManager/yan-student-search";
+    import {deleteOne, update} from "@/api/user";
 
     export default {
         name: "yanStudentTable.vue",
 
         data() {
-            this.cacheData = data.map(item => ({ ...item }));
             return {
-                data,
                 editingKey: '',
                 selectedRowKeys: [],
             };
@@ -79,6 +78,7 @@
             ...mapGetters([
                 'st_columns',
                 'st_edit',
+                'st_table_data',
             ])
         },
 
@@ -95,16 +95,22 @@
                 })
             },
 
-            handleDelete() {
+            async handleDelete() {
                 // 先删除再刷新
                 const all = this.selectedRowKeys.length;
                 let [success, failsure] = [0, 0];
 
                 while (this.selectedRowKeys.length > 0) {
-                    const index = this.data.findIndex(item => item.key === this.selectedRowKeys[0]);
+                    const index = this.st_table_data.findIndex(item => item.key === this.selectedRowKeys[0]);
                     if (index >= 0) {
-                        this.data.splice(index, 1);
-                        success++;
+                        await deleteOne('/student/delete/' + this.st_table_data[index].student_id).then(res => {
+                            if (res.data.code === 200) {
+                                this.$store.dispatch('st_splice_table_data', index);
+                                success++;
+                            }else {
+                                failsure++;
+                            }
+                        })
                     }else {
                         failsure++;
                     }
@@ -114,50 +120,52 @@
             },
 
             onSelectChange(selectedRowKeys) {
-                console.log('selectedRowKeys changed: ', selectedRowKeys);
                 this.selectedRowKeys = selectedRowKeys;
             },
 
             handleChange(value, key, column) {
-                const newData = [...this.data];
+                const newData = [...this.st_table_data];
                 const target = newData.filter(item => key === item.key)[0];
                 if (target) {
                     target[column] = value;
-                    this.data = newData;
+                    this.$store.commit('st_update_table_data', newData);
                 }
             },
 
             edit(key) {
-                const newData = [...this.data];
+                const newData = [...this.st_table_data];
                 const target = newData.filter(item => key === item.key)[0];
                 this.editingKey = key;
                 if (target) {
                     target.editable = true;
-                    this.data = newData;
+                    this.$store.commit('st_update_table_data', newData);
                 }
             },
+
             save(key) {
-                const newData = [...this.data];
-                const newCacheData = [...this.cacheData];
+                const newData = [...this.st_table_data];
                 const target = newData.filter(item => key === item.key)[0];
-                const targetCache = newCacheData.filter(item => key === item.key)[0];
-                if (target && targetCache) {
+                if (target) {
                     delete target.editable;
-                    this.data = newData;
-                    Object.assign(targetCache, target);
-                    this.cacheData = newCacheData;
+                    this.$store.commit('st_update_table_data', newData)
+                    update('student', target).then(res => {
+                        if (res.data.code === 200) {
+                            this.$message.success("修改成功");
+                        }else {
+                            this.$message.error(res.data.msg);
+                        }
+                    })
                 }
                 this.editingKey = '';
             },
 
             cancel(key) {
-                const newData = [...this.data];
+                const newData = [...this.st_table_data];
                 const target = newData.filter(item => key === item.key)[0];
                 this.editingKey = '';
                 if (target) {
-                    Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
                     delete target.editable;
-                    this.data = newData;
+                    this.$store.commit('st_update_table_data', newData);
                 }
             },
         },
