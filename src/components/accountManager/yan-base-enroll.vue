@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="student-enroll">
-            <label class="enroll-title">学生信息录入</label>
+        <div class="base-enroll">
+            <label class="base-title">基地信息录入</label>
             <a-button-group class="button-group">
                 <a-button type="primary" @click="toTable">信息查询<a-icon type="right" /> </a-button>
             </a-button-group>
@@ -10,10 +10,10 @@
         <div class="enroll-wrapper">
             <a-row type="flex" justify="space-around" :gutter="20">
                 <a-col style="background: rgba(102,102,102,0.06); border-radius: 10px" :span="15">
-                    <student-individual></student-individual>
+                    <base-individual></base-individual>
                 </a-col>
                 <a-col style="background: rgba(102,102,102,0.06); border-radius: 10px" :span="8">
-                    <student-batch></student-batch>
+                    <base-batch></base-batch>
                 </a-col>
             </a-row>
         </div>
@@ -23,32 +23,32 @@
 </template>
 
 <script>
-    import studentIndividual from './enroll/student-individual'
-    import studentBatch from './enroll/upload-batch'
+    import baseIndividual from './enroll/base-individual'
+    import baseBatch from './enroll/upload-batch'
 
     export default {
-        name: "yan-student-enroll",
+        name: "yan-base-enroll",
 
         components: {
-            studentIndividual,
-            studentBatch,
+            baseIndividual,
+            baseBatch,
         },
 
         methods: {
             toTable() {
-                this.$router.push("/user/student/table");
+                this.$router.push("/user/base/table");
             },
         }
     }
 </script>
 
 <style scoped>
-    .student-enroll{
+    .base-enroll{
         text-align: center;
         padding: 10px;
     }
 
-    .enroll-title {
+    .base-title {
         font-size: 15px;
     }
 

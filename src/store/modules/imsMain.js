@@ -101,6 +101,34 @@ const imsMain = {
                             },
                         ]
                     },
+                    {
+                        name: "基地管理",
+                        path: 'base',
+                        redirect: '/user/base/table',
+                        component: () => import('@/components/accountManager/yan-base'),
+                        meta: {
+                            icon: 'base',
+                            roles: [1, 2, 3, 4],
+                        },
+                        children: [
+                            {
+                                path: 'enroll',
+                                component: ()=> import('@/components/accountManager/yan-base-enroll'),
+                                meta: {
+                                    icon: 'enroll',
+                                    roles: [1, 2, 3, 4],
+                                }
+                            },
+                            {
+                                path: 'table',
+                                component: ()=> import('@/components/accountManager/yan-base-table'),
+                                meta: {
+                                    icon: 'table',
+                                    roles: [1, 2, 3, 4],
+                                }
+                            },
+                        ]
+                    }
                 ],
             },
             {
@@ -123,7 +151,7 @@ const imsMain = {
                         }
                     },
                     {
-                        name: '项目编辑',
+                        name: '项目审核',
                         path: 'edit',
                         component: () => import ('@/components/project/yan-project-edit'),
                         meta: {
@@ -141,32 +169,79 @@ const imsMain = {
                         }
                     },
                     {
-                        name: '项目审核',
-                        path: 'audit',
+                        name: '我的项目',
+                        path: 'myProject',
                         component: () => import('@/components/project/yan-project-audit'),
                         meta: {
-                            icon: 'application',
+                            icon: 'myProject',
+                            roles: [1, 2, 3, 4],
+                        }
+                    },
+                    // {
+                    //     name: '项目发布',
+                    //     path: 'publish',
+                    //     component: () => import('@/components/project/yan-project-publish'),
+                    //     meta: {
+                    //         icon: 'publish',
+                    //         roles: [1, 2, 3, 4],
+                    //     }
+                    // },
+                    // {
+                    //     name: '项目签订',
+                    //     path: 'signed',
+                    //     component: () => import('@/components/project/yan-project-signed'),
+                    //     meta: {
+                    //         icon: 'signed',
+                    //         roles: [1, 2, 3, 4],
+                    //     }
+                    // }
+                ]
+            },
+            {
+                name: '实习管理',
+                path: '/internship',
+                redirect: "/internship/internShipDashboard",
+                component: () => import('@/views/internship'),
+                meta: {
+                    icon: 'calendar',
+                    roles: [1, 2, 3, 4],
+                },
+                children: [
+                    {
+                        name: '实习检索',
+                        path: 'internShipDashboard',
+                        component: () => import('@/components/internship/yan-internship-dashboard'),
+                        meta: {
+                            icon: 'interShipDashboard',
                             roles: [1, 2, 3, 4],
                         }
                     },
                     {
-                        name: '项目发布',
-                        path: 'publish',
-                        component: () => import('@/components/project/yan-project-publish'),
+                        name: '实习申请',
+                        path: 'internShipApplication',
+                        // component: () => import('@/components/project/yan-project-audit'),
                         meta: {
-                            icon: 'publish',
+                            icon: 'internShipApplication',
                             roles: [1, 2, 3, 4],
                         }
                     },
                     {
-                        name: '项目签订',
-                        path: 'signed',
-                        component: () => import('@/components/project/yan-project-signed'),
+                        name: '实习审核',
+                        path: 'internShipAudit',
                         meta: {
-                            icon: 'signed',
+                            icon: 'internShipAudit',
                             roles: [1, 2, 3, 4],
                         }
-                    }
+                    },
+                    {
+                        name: '我的实习',
+                        path: 'myInternship',
+                        // component: () => import('@/components/project/yan-project-audit'),
+                        meta: {
+                            icon: 'myInternship',
+                            roles: [1, 2, 3, 4],
+                        }
+                    },
                 ]
             },
             {
@@ -178,15 +253,12 @@ const imsMain = {
                     roles: [1, 2, 3, 4],
                 }
             },
-            {
-                name: '实习管理',
-                path: '/internship',
-                component: () => import('@/components/home/home'),
-                meta: {
-                    icon: 'calendar',
-                    roles: [1, 2, 3, 4],
-                }
-            }
+
+            // {
+            //     name: '出错',
+            //     path: 'error',
+            //     component: ()=> import('@/components/error/serve-error'),
+            // }
         ],
 
         collapse: false,
@@ -202,11 +274,12 @@ const imsMain = {
             'user': '用户管理',
             'student': '学生管理',
             'tutor': '导师管理',
+            'base': '基地管理',
             'project': '项目管理',
             'statistics': '数据统计分析',
             'internship': '实习管理',
             'dashboard': '项目检索',
-            'edit': '项目编辑',
+            'edit': '项目审核',
             'application': '项目申请',
             'audit': '项目审核',
             'publish': '项目发布',

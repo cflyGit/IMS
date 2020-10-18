@@ -29,3 +29,11 @@ export function update(actor, params) {
         data: params,
     })
 }
+
+export function post(url, params) {
+    return request({
+        url: url,
+        method: 'post',
+        data: params,
+    })
+}

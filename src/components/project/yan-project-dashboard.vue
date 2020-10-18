@@ -24,7 +24,7 @@
 
         <a-tabs :tab-position="tabPosition" @change="tab_change">
             <a-tab-pane v-for="(_tab, index) in tab_pane_title" :key=index :tab=_tab>
-                <a-list :data-source=projects_publish bordered>
+                <a-list :data-source=current_project_list bordered>
                     <a-list-item slot="renderItem" :key="`a-${item.id}`" slot-scope="item">
                         <a slot="actions" @click="showDrawer(item)"><a-icon type="double-left" /></a>
                         <a-list-item-meta :description=item.base>
@@ -48,25 +48,28 @@
                     {{current_project.base}}
                 </a-descriptions-item>
                 <a-descriptions-item label="申请时间">
-                    {{current_project.time}}
+                    {{current_project.application_time}}
                 </a-descriptions-item>
                 <a-descriptions-item label="审核时间" :span="2">
-                    {{current_project.time}}
+                    {{current_project.audit_time}}
                 </a-descriptions-item>
                 <a-descriptions-item label="签订时间" >
-                    {{current_project.time}}
+                    {{current_project.signed_time}}
                 </a-descriptions-item>
                 <a-descriptions-item label="发布时间" :span="2">
-                    {{current_project.time}}
+                    {{current_project.publish_time}}
                 </a-descriptions-item>
-                <a-descriptions-item label="状态" :span="3">
+                <a-descriptions-item label="结束时间">
+                    {{current_project.finished_time}}
+                </a-descriptions-item>
+                <a-descriptions-item label="状态" :span="2">
                     <a-badge status="processing" :text="tab_pane_title[current_tab]+'中'" />
                 </a-descriptions-item>
                 <a-descriptions-item label="已招人数/招收人数" :span="3">
                     {{current_project.recoreded}}/{{current_project.number}}
                 </a-descriptions-item>
-                <a-descriptions-item label="标签" :span="3">
-                    <a-tag v-for="tag in current_project.label" :key=tag color="grey">
+                <a-descriptions-item v-if="current_project.tags!=null" label="标签" :span="3">
+                    <a-tag v-for="tag in current_project.tags.split('|')" :key=tag color="grey">
                         {{tag}}
                     </a-tag>
                 </a-descriptions-item>
@@ -79,9 +82,10 @@
 </template>
 
 <script>
-    import {projects_publish_test} from "@/store/modules/projects";
     import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
     import {mapGetters} from "vuex";
+    import {search} from "@/api/user";
+
     export default {
         name: "yan-project-dashboard",
 
@@ -94,19 +98,23 @@
                 locale,
 
                 visible: false,
-                current_project: [],
+                // current_project: [],
                 tabPosition: 'top',
                 loading: false,
                 current_tab: "application",
             }
         },
         computed:{
-            projects_publish: function() {
-                return projects_publish_test;
-            },
             ...mapGetters([
                 'tab_pane_title',
+                'current_project_list',
+                'title2number',
+                'current_project',
             ]),
+        },
+
+        mounted: function() {
+            this.tab_change(this.current_tab);
         },
 
         methods: {
@@ -114,7 +122,27 @@
                 var that = this;
                 //设置加载中状态
                 that.loading = true;
-                console.log(value);
+                let url = null;
+                if (!(value === "" || value === null)) {
+                    url = "project/findByName/" + value;
+                }else if (this.startValue != null || this.endValue != null) {
+                    url = "project/findByDate/" + this.startValue + "/" + this.endValue + "/" + this.current_tab;
+                }
+                if (url !== null) {
+                    search(url).then(res => {
+                        that.loading = false;
+                        if (res.data.code == 200) {
+                            this.$store.dispatch('pro_update_current_project_list', res.data.data);
+                            this.$message.success("查询成功");
+                        }else {
+                            this.$store.dispatch('pro_update_current_project_list', []);
+                            this.$message.error("出错!请稍后再试");
+                        }
+                    });
+                }else {
+                    this.$message.error("请输入搜索内容！");
+                }
+
                 setTimeout(function () {
                     that.loading = false;
                 }, 3000);
@@ -122,19 +150,33 @@
 
             tab_change(activeKey) {
                 this.current_tab = activeKey;
-                // console.log(this.current_tab);
+                search("project/findByStatus/" + this.title2number[this.current_tab]).then(res => {
+                    if (res.data.code == 200) {
+                        this.$store.dispatch('pro_update_current_project_list', res.data.data);
+                    }else {
+                        this.$store.dispatch('pro_update_current_project_list', []);
+                    }
+                })
             },
 
             to_project_edit(item) {
                 this.$store.commit('update_current_project', item);
+                search("audit/findById/" + this.current_project.project_id).then(res => {
+                    if (res.data.code == 200) {
+                        this.$store.dispatch('pro_update_audit_info', res.data.data);
+                    }else {
+                        this.$message.error("出错了,请稍后再试");
+                    }
+                })
                 // let toPath = "/project/" + item.status;
                 // console.log(item);
                 this.$router.push("/project/edit");
+                this.$store.commit("updateBread", "/project/edit");
             },
 
             showDrawer(item) {
                 this.visible = true;
-                this.current_project = item;
+                this.$store.dispatch('pro_update_current_project', item);
             },
             onClose() {
                 this.visible = false;

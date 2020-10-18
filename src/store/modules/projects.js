@@ -1,319 +1,3 @@
-
-const projects_publish_test = [
-    {
-        "project_id": 202010030000,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "application",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    },
-    {
-        "project_id": 2020100300001,
-        "name": "研究生实习实践管理平台",
-        "base": "518研究所",
-        "position": "北京邮电大学学十公寓518",
-        "label": ["java", "深度学习", "强化学习", "c", "c++"],
-        "number": 10,
-        "recoreded": 0,
-        "info": "学历要求硕士研究生以上",
-        "file": "202010030000_研究生实习实践管理平台.docx",
-        "time": "2020-10-03-18-21",
-        "status": "publish",
-    }
-];
-
 const projects = {
     state: {
         project_item: {
@@ -337,8 +21,16 @@ const projects = {
             "status": "状态",
         },
 
+        pro_application: ['项目名称', '项目基地', '负责人', '地址', '招收人数'],
+        pro_application_en: ['name', 'base', 'leader', 'address', 'number'],
+
         current_project: [],
-        tab_pane_title: {'application': '申请', 'audit': '审核', 'signed': '签订', 'publish': '发布', 'over': '结束'},
+        current_project_list: [],
+        audit_info: {},
+        tab_pane_title: {'application': '申请', 'audit': '审核', 'signed': '签订', 'publish': '发布', 'finished': '结束'},
+        title2number: {'application': '0', 'audit': '1', 'signed': '2', 'publish': '3', 'finished': '4'},
+        number2title: {'0': '申请', '1': '审核', '2': '签订', '3': '发布', '4': "结束"},
+        number2title_en: {'0': 'application', '1': 'audit', '2': 'signed', '3': 'publish', '4': 'finished'}
     },
 
     getters: {
@@ -346,18 +38,52 @@ const projects = {
         tab_pane_title: state => state.tab_pane_title,
         project_item: state => state.project_item,
         project_item_auto: state => state.project_item_auto,
-
+        current_project_list: state => state.current_project_list,
+        pro_application: state => state.pro_application,
+        pro_application_en: state => state.pro_application_en,
+        title2number: state => state.title2number,
+        number2title: state => state.number2title,
+        number2title_en: state => state.number2title_en,
+        audit_info: state => state.audit_info,
+        audit_comments: state => {
+            let audit = {};
+            for (let s in state.tab_pane_title) {
+                if (state.audit_info[s+"_comments"] != null && state.audit_info[s+"_reviewer"] != null) {
+                    audit[s] = state.audit_info[s+"_comments"] + "\n核对人:" + state.audit_info[s+"_reviewer"];
+                }
+            }
+            return audit;
+        }
     },
 
     mutations: {
         update_current_project(state, project) {
             state.current_project = project;
+        },
+
+        update_current_project_list(state, project_list) {
+            state.current_project_list = project_list;
+        },
+
+        update_audit_info(state, audit_info) {
+            state.audit_info = audit_info;
         }
     },
-}
 
-export {
-    projects_publish_test,
+    actions: {
+        pro_update_current_project({commit}, project) {
+            commit('update_current_project', project);
+        },
+
+        pro_update_current_project_list({commit}, project_list) {
+            commit('update_current_project_list', project_list);
+        },
+
+        pro_update_audit_info({commit}, audit_info) {
+            commit('update_audit_info', audit_info);
+        }
+
+    }
 }
 
 export default projects;

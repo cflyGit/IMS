@@ -12,29 +12,32 @@
                             {{current_project.base}}
                         </a-descriptions-item>
                         <a-descriptions-item label="申请时间">
-                            {{current_project.time}}
+                            {{current_project.application_time}}
                         </a-descriptions-item>
                         <a-descriptions-item label="审核时间" :span="2">
-                            {{current_project.time}}
+                            {{current_project.audit_time}}
                         </a-descriptions-item>
                         <a-descriptions-item label="签订时间" >
-                            {{current_project.time}}
+                            {{current_project.signed_time}}
                         </a-descriptions-item>
                         <a-descriptions-item label="发布时间" :span="2">
-                            {{current_project.time}}
+                            {{current_project.publish_time}}
                         </a-descriptions-item>
-                        <a-descriptions-item label="状态" :span="3">
-                            <a-badge status="processing" :text="tab_pane_title[current_project.status]+'中'" />
+                        <a-descriptions-item label="结束时间">
+                            {{current_project.finished_time}}
+                        </a-descriptions-item>
+                        <a-descriptions-item label="状态" :span="2">
+                            <a-badge status="processing" :text="number2title[current_project.status]+'中'" />
                         </a-descriptions-item>
                         <a-descriptions-item label="已招人数/招收人数" :span="3">
                             {{current_project.recoreded}}/{{current_project.number}}
                         </a-descriptions-item>
-                        <a-descriptions-item label="标签" :span="3">
-                            <a-tag v-for="tag in current_project.label" :key=tag color="grey">
+                        <a-descriptions-item v-if="current_project.tags!=null" label="标签" :span="3">
+                            <a-tag v-for="tag in current_project.tags.split('|')" :key=tag color="grey">
                                 {{tag}}
                             </a-tag>
                         </a-descriptions-item>
-                        <a-descriptions-item label="详细信息" :span="3">
+                        <a-descriptions-item label="详细信息" :span="2">
                             {{current_project.info}}
                         </a-descriptions-item>
                     </a-descriptions>
@@ -46,7 +49,7 @@
                                 <a-list-item v-for="(item, index) in tab_pane_title" :key=index>
                                     <label>{{item}}</label>
                                     <template >
-                                        <a-textarea :placeholder=item autoSize :disabled="current_project.status !== index"/>
+                                        <a-textarea :placeholder=item v-model=audit_comments[index] autoSize allowClear :disabled="number2title[current_project.status] !== item"/>
                                     </template>
                                 </a-list-item>
                             </a-list>
@@ -60,15 +63,21 @@
                         <a-col class="timeline-wrapper" :span="4">
                             <a-timeline mode="right">
                                 <a-timeline-item v-for="(item, index) in tab_pane_title" :key=index :color=pro_color(index)>
-                                    <a-icon v-if="index == current_project.status" slot="dot" type="clock-circle-o" style="{font-size: 16px;}" />
+                                    <a-icon v-if="title2number[index] == current_project.status" slot="dot" type="clock-circle-o" style="{font-size: 16px;}" />
                                     {{item}}
                                 </a-timeline-item>
                             </a-timeline>
                         </a-col>
                     </a-row>
-                    <a-button type="danger" icon="check" style="display:block;margin:0 auto" @click="handleAgree">
-                        同意并移交给下一阶段
-                    </a-button>
+                    <div class="agreeButton">
+                        <a-button type="danger" icon="close" @click="handleDisagree">
+                            退回
+                        </a-button>
+                        <a-button type="primary" icon="check" style="margin-left: 30px" @click="handleAgree">
+                            同意
+                        </a-button>
+                    </div>
+
                 </a-col>
 
                 <a-col class="edit-right" :span="12">
@@ -107,6 +116,7 @@
 
 <script>
     import {mapGetters} from "vuex";
+    import {update, post} from "@/api/user"
 
     export default {
         name: "yan-project-edit",
@@ -128,12 +138,12 @@
                 return function (index) {
                     let dict = {};
                     let count = 0;
-                    for (let t in this.$store.getters.tab_pane_title) {
+                    for (let t in this.$store.getters.title2number) {
                         dict[t] = count++;
                     }
-                    if (dict[this.$store.getters.current_project.status] > dict[index]) {
+                    if (this.$store.getters.current_project.status > dict[index]) {
                         return "green";
-                    } else if (dict[this.$store.getters.current_project.status] === dict[index]) {
+                    } else if (this.$store.getters.current_project.status === dict[index]) {
                         return "red";
                     }
 
@@ -143,15 +153,47 @@
             ...mapGetters([
                 'current_project',
                 'tab_pane_title',
+                'number2title',
+                'title2number',
+                'number2title_en',
+                'audit_info',
+                'audit_comments',
             ])
         },
         methods: {
             handleAgree() {
-                this.$message.success("操作成功，已移交给***");
+                this.form.validateFields((err, value) => {
+                    if (!err) {
+                        let param = {};
+                        let status = this.number2title_en[this.current_project.status];
+                        param[status + "_comments"] = this.audit_comments[status];
+                        param[status + "_reviewer"] = value["audit"];
+                        param["project_id"] = this.current_project.project_id;
+                        update("audit", param).then(res => {
+                            if (res.data.code === 200) {
+                                this.$message.success("操作成功！");
+                            }else {
+                                this.$message.error(res.data.msg);
+                            }
+                        });
+                    }
+                })
+
+            },
+
+            handleDisagree() {
+                post(("audit/statusBack"), this.audit_info).then(res => {
+                    if (res.data.code == 200) {
+                        this.$message.success("操作成功");
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                })
             },
 
             handleImport() {
                 this.$router.push("/project/dashboard");
+                this.$store.commit('updateBread', "/project/dashboard");
             },
 
             nextPage() {
@@ -197,5 +239,9 @@
         background: rgba(36, 36, 36, 0.89);
         text-align: center;
         border-right-radius: 10px;
+    }
+
+    .agreeButton{
+        text-align: center;
     }
 </style>
