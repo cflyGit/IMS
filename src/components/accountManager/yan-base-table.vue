@@ -87,7 +87,8 @@
                     const index = this.base_table_data.findIndex(item => item.key === this.selectedRowKeys[0]);
                     if (index >= 0) {
                         await deleteOne('/base/delete/' + this.base_table_data[index].base_id).then(res => {
-                            if (res.data.code === 200) {
+                            if (res.success !== undefined && res.success === true) {
+                                console.log(index)
                                 this.$store.dispatch('base_splice_table_data', index);
                                 success++;
                             }else {
@@ -130,12 +131,10 @@
                 const target = newData.filter(item => key === item.key)[0];
                 if (target) {
                     delete target.editable;
-                    this.$store.dispatch('base_update_table_data', newData)
+                    this.$store.dispatch('base_update_table_data', newData);
                     update('base', target).then(res => {
-                        if (res.data.code === 200) {
+                        if (res.success !== undefined && res.success === true) {
                             this.$message.success("修改成功");
-                        }else {
-                            this.$message.error(res.data.msg);
                         }
                     })
                 }

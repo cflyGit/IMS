@@ -5,7 +5,7 @@ const base={
                 title: '基地编号',
                 dataIndex: 'base_id',
                 require: true,
-                enroll: false,
+                enroll: true,
             },
             {
                 title: '基地名称',

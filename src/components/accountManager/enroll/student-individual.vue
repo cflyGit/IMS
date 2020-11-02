@@ -72,11 +72,9 @@
                     if (!err) {
                         values.register_time = getTime("yyyy-MM-dd hh:mm:ss");
                         insert("student", values).then(res=>{
-                            if (res.data.code === 200) {
+                            if (res.success !== undefined && res.success === true) {
                                 this.$message.success("提交成功");
                                 this.handleReset();
-                            }else {
-                                this.$message.error(res.data.msg);
                             }
                         })
                     }

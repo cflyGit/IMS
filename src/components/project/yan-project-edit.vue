@@ -170,10 +170,8 @@
                         param[status + "_reviewer"] = value["audit"];
                         param["project_id"] = this.current_project.project_id;
                         update("audit", param).then(res => {
-                            if (res.data.code === 200) {
+                            if (res.success === true) {
                                 this.$message.success("操作成功！");
-                            }else {
-                                this.$message.error(res.data.msg);
                             }
                         });
                     }
@@ -183,10 +181,8 @@
 
             handleDisagree() {
                 post(("audit/statusBack"), this.audit_info).then(res => {
-                    if (res.data.code == 200) {
+                    if (res.success === true) {
                         this.$message.success("操作成功");
-                    } else {
-                        this.$message.error(res.data.msg);
                     }
                 })
             },

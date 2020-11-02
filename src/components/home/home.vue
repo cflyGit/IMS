@@ -85,7 +85,7 @@
             return {
                 star_count: 1314,
             }
-        }
+        },
     }
 </script>
 

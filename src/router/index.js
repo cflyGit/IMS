@@ -70,6 +70,7 @@ const yanRouter = createRouter(staticRoutes);
 yanRouter.beforeEach((to, from, next) => {
     let hasAuth = getAuth();
     // store.commit('logout');
+
     if (to.path == '/login') {
         if (hasAuth) {
             next({path: '/'});

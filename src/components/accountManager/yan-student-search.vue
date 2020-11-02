@@ -45,11 +45,10 @@
 
                 search("student/findBy" + this.tag + "/" + value).then(res=>{
                     that.loading = false;
-                    if (res.data.code == 200) {
+                    if (res.success !== undefined && res.success === true) {
                         this.$message.success("查询成功");
-                        this.$store.commit('st_update_table_data', json2array(res.data.data))
+                        this.$store.commit('st_update_table_data', json2array(res.data))
                     }else {
-                        this.$message.error(("查询结果不存在"));
                         this.$store.commit('st_update_table_data', null);
                     }
                 });

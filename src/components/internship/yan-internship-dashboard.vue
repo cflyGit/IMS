@@ -68,7 +68,7 @@
 
             getInternshipInfo(id) {
                 search("internship/findByProjectId/" + id).then(ans => {
-                    if (ans.data.code == 200) {
+                    if (ans.success === true) {
                         let itemList = ans.data.data;
                         return itemList;
                     }
@@ -79,7 +79,7 @@
             tab_change(activeKey){
                 this.current_tab = activeKey;
                 search("internship/getItemList/" + this.internship_tab_en.findIndex(activeKey) + this.offset).then(res => {
-                    if (res.data.code == 200) {
+                    if (res.success === true) {
                         this.$store.commit('update_internship_list', res.data.data);
                     }else {
                         this.$store.commit('update_internship_list', []);

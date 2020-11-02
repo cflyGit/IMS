@@ -5,6 +5,7 @@
         <a-upload-dragger
                 name="uploadFile"
                 method="post"
+                :headers="headers"
                 :multiple="true"
                 :action=upload_url
                 @change="handleChange"
@@ -31,16 +32,25 @@
             return{
                 // admin 功能
                 upload_url: baseUrl + '/admin/' + 'upload/' + this.$router.currentRoute.path.split('/')[2],
+
+            }
+        },
+        computed:{
+            headers() {
+                return {
+                    'Authorization': this.$store.getters.token,
+                }
             }
         },
         methods: {
             handleChange(info) {
                 const status = info.file.status;
+                const res = info.file.response
                 if (status === 'done') {
-                    if (info.file.response.code === 200)
+                    if (res.success !== undefined && res.success === true)
                         this.$message.success(`${info.file.name} 文件上传成功, 记录已导入.`);
                     else
-                        this.$message.warning(`文件中行数为:${info.response.data.data.toString()}的记录导入失败，请检查后重新导入`);
+                        this.$message.warning(`文件中行数为:${res.data.toString()}的记录导入失败，请检查后重新导入`);
                 } else if (status === 'error') {
                     this.$message.error(`文件格式可能不正确，${info.file.name} 文件上传失败.`);
                 }

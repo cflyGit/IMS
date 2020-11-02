@@ -131,12 +131,11 @@
                 if (url !== null) {
                     search(url).then(res => {
                         that.loading = false;
-                        if (res.data.code == 200) {
-                            this.$store.dispatch('pro_update_current_project_list', res.data.data);
+                        if (res.success === true) {
+                            this.$store.dispatch('pro_update_current_project_list', res.data);
                             this.$message.success("查询成功");
                         }else {
                             this.$store.dispatch('pro_update_current_project_list', []);
-                            this.$message.error("出错!请稍后再试");
                         }
                     });
                 }else {
@@ -151,8 +150,8 @@
             tab_change(activeKey) {
                 this.current_tab = activeKey;
                 search("project/findByStatus/" + this.title2number[this.current_tab]).then(res => {
-                    if (res.data.code == 200) {
-                        this.$store.dispatch('pro_update_current_project_list', res.data.data);
+                    if (res.success == true) {
+                        this.$store.dispatch('pro_update_current_project_list', res.data);
                     }else {
                         this.$store.dispatch('pro_update_current_project_list', []);
                     }
@@ -162,10 +161,8 @@
             to_project_edit(item) {
                 this.$store.commit('update_current_project', item);
                 search("audit/findById/" + this.current_project.project_id).then(res => {
-                    if (res.data.code == 200) {
-                        this.$store.dispatch('pro_update_audit_info', res.data.data);
-                    }else {
-                        this.$message.error("出错了,请稍后再试");
+                    if (res.success == true) {
+                        this.$store.dispatch('pro_update_audit_info', res.data);
                     }
                 })
                 // let toPath = "/project/" + item.status;

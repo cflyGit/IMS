@@ -1,5 +1,9 @@
 import axios from 'axios'
-// import store from '@/store'
+// import {ActionContext as store} from "vuex";
+import store from '@/store'
+import {message, Modal} from "ant-design-vue"
+import yanRouter from "../router";
+// import yanRouter from "../router";
 // import {getToken} from '@/config/auth'
 
 const headers = {
@@ -16,55 +20,70 @@ let request = axios.create( {
     timeout: 2500
 })
 
-// request interceptor
-// request.interceptor.request.use(config => {
-//     if (store.getters.token) {
-//         config.headers = {
-//             'Authorization': "Token" + getToken('Token'),
-//         };
-//     }
-//     return config
-// }, error => {
-//     Promise.reject(error)
-// })
+request.interceptors.request.use(config => {
+    if (store.getters.token) {
+        config.headers = {
+            'Authorization': store.getters.token,
+        };
+        // console.log(config.headers)
+    }
+    return config
+}, error => {
+    Promise.reject(error)
+})
 
-// response interceptor
-// request.interceptor.reponse.use(
-//     response => {
-//         const res = reponse.data
-//         if (res.code !== 200) {
-//             Message:({
-//                 message: res.message,
-//                 type: 'error',
-//                 duration: 5 * 1000
-//             })
-//
-//             /**
-//              * 5001: 非法token， 5002: 其他客户端在登录, 5004: token过期
-//              */
-//             if (res.code == 5001 || res.code.code === 5002 || res.code === 5004) {
-//                 MessageBox.comfirm('你已被登出，请重新登录', '确定登出', {
-//                     confirmButtonText: '重新登录',
-//                     cancelButtonText: '取消',
-//                     type: 'warning'
-//                 }).then(() => {
-//                     store.dispatch('LogOut').then(() => {
-//                         location.reload() // 重新实例化veu-router
-//                     })
-//                 })
-//             }
-//             return Promise.reject('error')
-//         }else { // res.code == 200 正常
-//             return response.data
-//         }
-//     }, error => {
-//         Message({
-//             message: error.message,
-//             type: 'error',
-//             duration: 5 * 1000
-//         })
-//         return Promise.reject(error)
-//     }
-// )
+request.interceptors.response.use(
+    response => {
+
+        let res = response.data;
+        console.log(res)
+        if (res.success !== undefined && res.success === false) {
+
+            // 1500 - 1999 用户交互
+            if (res.errorCode > 1499 && res.errorCode < 2000) {
+                message.error(res.errorMsg);
+                return res;
+            }
+
+            // 2000 - 2999 用户错误
+            if (res.errorCode > 1999 && res.errorCode < 3000) {
+                // message.error(res.errorMsg);
+                    Modal.error({
+                        title: "出错",
+                        content: res.errorMsg + "。 请重新登录",
+                        onOk: Logout,
+                    })
+            }
+
+            // common fail 999
+            if (res.errorCode === 999) {
+                message.error(res.errorMsg);
+            }
+
+            // logout success 201
+            if (res.errorCode === 201) {
+                message.success(res.errorMsg);
+            }
+
+            /**
+             * 403: token
+             */
+            if (res.errorCode === 403) {
+                Modal.error({
+                    title: "无权限",
+                    content: "抱歉，你无权访问此内容！",
+                })
+            }
+        }else { // res.code == 200 正常
+            return res
+        }
+    }
+)
+
+function Logout() {
+    console.log("logout");
+    store.commit("logout");
+    yanRouter.push("/login");
+}
 
 export default request

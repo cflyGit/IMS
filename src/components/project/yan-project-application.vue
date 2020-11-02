@@ -22,8 +22,9 @@
                     <a-upload
                             name="uploadFile"
                             method="post"
+                            :headers="headers"
                             :multiple="true"
-                            action=upload_url
+                            :action=upload_url
                             :default-file-list=defaultFileList>
                         <a-button> <a-icon type="upload" /> 上传 </a-button>
                     </a-upload>
@@ -75,7 +76,13 @@
                'project_item',
                 'pro_application',
                 'pro_application_en',
-            ])
+            ]),
+
+            headers(){
+                return {
+                    'Authorization': this.$store.getters.token,
+                }
+            }
         },
 
         methods: {
@@ -86,12 +93,11 @@
                         values.application_time = getTime("yyyy-MM-dd hh:mm:ss");
                         values.status = 0;
                         values.tags = this.tags.join("|");
+                        console.log(values);
                         insert("project", values).then(res => {
-                            if (res.data.code === 200) {
+                            if (res.success === true) {
                                 this.$message.success("提交成功");
                                 this.handleClear();
-                            }else {
-                                this.$message.error(res.data.msg);
                             }
                         })
                     }

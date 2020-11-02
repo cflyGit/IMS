@@ -27,7 +27,9 @@
 <script>
     import { mapGetters } from 'vuex'
     import YanBread from "@/components/home/yan-bread";
-export default {
+    import {logout} from "@/api/logout";
+
+    export default {
     name: "yanHeadNav",
     components: {YanBread},
     data() {
@@ -47,7 +49,8 @@ export default {
 
         logout() {
             this.$store.commit('logout');
-            this.$router.push('/login');
+            logout();
+            // this.$router.push('/login');
         },
     },
 }

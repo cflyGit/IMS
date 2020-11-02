@@ -1,5 +1,6 @@
 import {resetRouter} from "@/router";
 import yanRouter from "@/router";
+import {setToken} from "@/config/auth";
 
 function hasPermission(roles, route) {
     if (route.meta && route.meta.roles) {
@@ -264,11 +265,11 @@ const imsMain = {
         collapse: false,
         menus: [],
         breads: ['index'],
-        actor2roles: {'admin': 1, 'tutor': 2, 'base': 3, 'student': 4, 'default': 999},
+        actor2roles: {'Admin': 1, 'Tutor': 2, 'Base': 3, 'Student': 4, 'default': 999},
 
         userInfo: null,
         token: null,
-        actor: 'admin',
+        actor: null,
 
         menu_dict: {'index': '首页',
             'user': '用户管理',
@@ -389,6 +390,7 @@ const imsMain = {
             localStorage.removeItem('user');
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
+            yanRouter.push("/login");
         }
     },
 
@@ -413,11 +415,13 @@ const imsMain = {
         setUserInfo({commit, state}, userInfo, flag=true) {
             state.userInfo = userInfo;
             state.token = userInfo.token;
+            state.actor = userInfo.actor;
             if (flag) {
                 localStorage.setItem('user', JSON.stringify(userInfo))
             }else {
                 sessionStorage.setItem('user', JSON.stringify(userInfo))
             }
+            setToken('token', state.token);
             commit('setToken', userInfo.token, flag);
             commit('setActor', userInfo.actor, flag);
         },

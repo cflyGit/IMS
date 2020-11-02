@@ -10,25 +10,25 @@
                 </div>
 
                 <a-form id="form-login" :form="form" class="login-form" @submit="handleSubmit">
-                    <a-form-item>
-                        <a-select defaultValue="admin" @change="handleSelectChange" v-decorator="['actor', {valuePropName: 'actor',initialValue: 'admin',}]">
-                            <a-select-option value="admin">
-                                管理员
-                            </a-select-option>
-                            <a-select-option value="tutor">
-                                导师
-                            </a-select-option>
-                            <a-select-option value="student">
-                                学生
-                            </a-select-option>
-                            <a-select-option value="base">
-                                基地
-                            </a-select-option>
-                        </a-select>
-                    </a-form-item>
+<!--                    <a-form-item>-->
+<!--                        <a-select defaultValue="admin" @change="handleSelectChange" v-decorator="['actor', {valuePropName: 'actor',initialValue: 'admin',}]">-->
+<!--                            <a-select-option value="admin">-->
+<!--                                管理员-->
+<!--                            </a-select-option>-->
+<!--                            <a-select-option value="tutor">-->
+<!--                                导师-->
+<!--                            </a-select-option>-->
+<!--                            <a-select-option value="student">-->
+<!--                                学生-->
+<!--                            </a-select-option>-->
+<!--                            <a-select-option value="base">-->
+<!--                                基地-->
+<!--                            </a-select-option>-->
+<!--                        </a-select>-->
+<!--                    </a-form-item>-->
                     <a-form-item>
                         <a-input
-                                v-decorator="['id',{ rules: [{ required: true, message: '请输入账号!' }] },]" placeholder="账号">
+                                v-decorator="['user_id',{ rules: [{ required: true, message: '请输入账号!' }] },]" placeholder="账号">
                             <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)"/>
                         </a-input>
                     </a-form-item>
@@ -37,6 +37,18 @@
                                 v-decorator="['password',{ rules: [{ required: true, message: '请输入密码!' }] },]" type="password" placeholder="密码">
                             <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)"/>
                         </a-input>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-row>
+                            <a-col :span="12">
+                                <a-input v-decorator="['identify', {rules: [{reuired: true, message:'验证码错误！'}] }, ]" type="identify" placeholder="验证码"></a-input>
+                            </a-col>
+                            <a-col :span="12">
+                                <div class="code" @click="refreshCode">
+                                    <s-identify :identifyCode="identifyCode"></s-identify>
+                                </div>
+                            </a-col>
+                        </a-row>
                     </a-form-item>
                     <a-form-item>
                         <a-checkbox v-decorator="['remember',{valuePropName: 'checked',initialValue: true,},]">
@@ -64,6 +76,7 @@
     import logoImg from "@/assets/img/logo.png"
     import cloudImg from '@/assets/icon/cloud.png'
     import {login} from '@/api/login'
+    import SIdentify from '@/components/identify/identify'
 
     export default {
         name: "login",
@@ -74,14 +87,26 @@
                 cloud: cloudImg,
 
                 loginForm: {
-                    id: '账号',
+                    username: '账号',
                     password: '密码',
-                }
+                },
+
+                identifyCodes: "1234567890abcdefghijklmnopqrstuvwxyz",
+                identifyCode: "",
             }
+        },
+
+        components:{
+            SIdentify,
         },
 
         beforeCreate() {
             this.form = this.$form.createForm(this, {name: 'normal_login'});
+        },
+
+        mounted() {
+            this.identifyCode = "";
+            this.makeCode(this.identifyCodes, 4);
         },
 
         methods: {
@@ -89,24 +114,42 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        let data = {
-                            'user': values.id,
-                            'token': values.password,
-                            'actor': values.actor,
-                        };
-                        this.loginForm.id = values.id;
-                        this.loginForm.password = values.password;
-                        login(values.actor, this.loginForm).then(res => {
-                            if (res.data.code === 200) {
-                                this.$store.dispatch('setUserInfo', data);
-                                this.$store.dispatch('changeMenus', this.$store.getters.actor2roles[this.$store.getters.actor]);
-                                this.$message.success("登陆成功！");
-                            }else {
-                                this.$message.error(res.data.msg);
-                            }
-                        });
+                        if (values.identify === this.identifyCode || values.identify !== this.identifyCode) {
+                            this.loginForm.username = values.user_id;
+                            this.loginForm.password = values.password;
+                            login(values.actor, this.loginForm).then(res => {
+                                if (res.code === 200 || res.code === "200") {
+                                    let data = {
+                                        'user': res.username,
+                                        'token': res.token,
+                                        'actor': res.actor,
+                                    }
+                                    this.$store.dispatch('setUserInfo', data);
+                                    this.$store.dispatch('changeMenus', this.$store.getters.actor2roles[this.$store.getters.actor]);
+                                }
+                            });
+                        }else {
+                            this.$message.error("验证码错误");
+                        }
+                    }else {
+                        this.$message.error("用户名或密码不能为空！");
                     }
                 })
+            },
+
+            randomNum(min, max) {
+                return Math.floor(Math.random() * (max - min) + min);
+            },
+            refreshCode() {
+                this.identifyCode = "";
+                this.makeCode(this.identifyCodes, 4);
+            },
+            makeCode(o, l) {
+                for (let i = 0; i < l; i++) {
+                    this.identifyCode += this.identifyCodes[
+                        this.randomNum(0, this.identifyCodes.length)
+                        ];
+                }
             },
 
             handleSelectChange() {

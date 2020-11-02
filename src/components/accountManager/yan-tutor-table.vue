@@ -88,7 +88,7 @@
                     const index = this.tt_table_data.findIndex(item => item.key === this.selectedRowKeys[0]);
                     if (index >= 0) {
                         await deleteOne('/tutor/delete/' + this.tt_table_data[index].tutor_id).then(res => {
-                            if (res.data.code === 200) {
+                            if (res.success !== undefined && res.success === true) {
                                 this.$store.dispatch('tt_splice_table_data', index);
                                 success++;
                             }else {
@@ -134,10 +134,8 @@
                     delete target.editable;
                     this.$store.commit('tt_update_table_data', newData);
                     update('tutor', target).then(res => {
-                        if (res.data.code === 200) {
+                        if (res.success !== undefined && res.success === true) {
                             this.$message.success("修改成功");
-                        }else {
-                            this.$message.error(res.data.msg);
                         }
                     })
                 }
