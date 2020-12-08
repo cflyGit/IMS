@@ -21,8 +21,8 @@ const projects = {
             "status": "状态",
         },
 
-        pro_application: ['项目名称', '项目基地', '负责人', '地址', '招收人数'],
-        pro_application_en: ['name', 'base', 'leader', 'address', 'number'],
+        pro_application: ['项目名称', '负责人', '地址', '招收人数'],
+        pro_application_en: ['name', 'leader', 'address', 'number'],
 
         current_project: [],
         current_project_list: [],
@@ -30,7 +30,9 @@ const projects = {
         tab_pane_title: {'application': '申请', 'audit': '审核', 'signed': '签订', 'publish': '发布', 'finished': '结束'},
         title2number: {'application': '0', 'audit': '1', 'signed': '2', 'publish': '3', 'finished': '4'},
         number2title: {'0': '申请', '1': '审核', '2': '签订', '3': '发布', '4': "结束"},
-        number2title_en: {'0': 'application', '1': 'audit', '2': 'signed', '3': 'publish', '4': 'finished'}
+        number2title_en: {'0': 'application', '1': 'audit', '2': 'signed', '3': 'publish', '4': 'finished'},
+
+        my_project_data: {},
     },
 
     getters: {
@@ -53,7 +55,8 @@ const projects = {
                 }
             }
             return audit;
-        }
+        },
+        my_project_data: state => state.my_project_data,
     },
 
     mutations: {
@@ -67,7 +70,11 @@ const projects = {
 
         update_audit_info(state, audit_info) {
             state.audit_info = audit_info;
-        }
+        },
+
+        update_my_project_data(state, data) {
+            state.my_project_data = data;
+}
     },
 
     actions: {
@@ -81,8 +88,11 @@ const projects = {
 
         pro_update_audit_info({commit}, audit_info) {
             commit('update_audit_info', audit_info);
-        }
+        },
 
+        pro_update_my_project_data({commit}, data) {
+            commit('update_my_project_data', data);
+        }
     }
 }
 

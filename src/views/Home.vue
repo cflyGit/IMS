@@ -3,7 +3,7 @@
         <yan-left-menu></yan-left-menu>
             <a-layout>
                 <yan-head-nav></yan-head-nav>
-                    <yan-content></yan-content>
+                <yan-content></yan-content>
             </a-layout>
     </a-layout>
 </template>

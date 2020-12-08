@@ -7,13 +7,14 @@ import tutor from './modules/tutor'
 import projects from './modules/projects'
 import base from './modules/base'
 import internship from "./modules/internship";
-// import login from './modules/login'
+import IMSHome from "./modules/home";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules:{
         imsMain,
+        IMSHome,
         student,
         tutor,
         projects,

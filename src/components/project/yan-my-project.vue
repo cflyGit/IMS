@@ -1,8 +1,7 @@
 <template>
-<!--    <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }" :data-source="internship_data">-->
-    <a-list :grid="{ gutter: 16, column: 1}" :data-source="internship_data">
+    <a-list :grid="{ gutter: 16, column: 1}" :data-source="my_project_data">
         <a-list-item slot="renderItem" slot-scope="item, index">
-            <a-card :title="`我的实习项目${index+1}`">
+            <a-card :title="`我的项目${index+1}`">
                 <a-descriptions :title=item.name bordered>
                     <a-descriptions-item label="项目编号">
                         {{item.project_id}}
@@ -27,18 +26,6 @@
                     <a-descriptions-item label="详细信息">
                         {{item.info}}
                     </a-descriptions-item>
-                    <a-descriptions-item label="研究生院">
-                        {{internship_audit_number2title[item.school_audit]}}
-                    </a-descriptions-item>
-                    <a-descriptions-item label="基地">
-                        {{internship_audit_number2title[item.base_audit]}}
-                    </a-descriptions-item>
-                    <a-descriptions-item label="导师1">
-                        {{internship_audit_number2title[item.tutor1_audit]}}
-                    </a-descriptions-item>
-                    <a-descriptions-item label="导师2">
-                        {{internship_audit_number2title[item.tutor2_audit]}}
-                    </a-descriptions-item>
                 </a-descriptions>
             </a-card>
         </a-list-item>
@@ -50,7 +37,7 @@
     import {IMSget} from "../../api/user";
 
     export default {
-        name: "yan-myinternship",
+        name: "yan-my-project",
 
         mounted: function() {
             this.init_data();
@@ -58,16 +45,16 @@
 
         computed: {
             ...mapGetters([
-                'internship_data',
-                'internship_audit_number2title',
+                'my_project_data',
             ])
         },
 
         methods: {
             init_data() {
-                IMSget("/student/getInternships").then(res => {
+                IMSget("/project/getProjects").then(res => {
                     if(res.success == true) {
-                        this.$store.dispatch('pro_update_internship_data', res.data);
+                        this.$store.dispatch('pro_update_my_project_data', res.data);
+                        console.log(res.data);
                     }
                 })
             }

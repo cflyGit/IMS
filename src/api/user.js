@@ -14,6 +14,13 @@ export function search(url) {
     })
 }
 
+export function IMSget(url) {
+    return request({
+        url: url,
+        method: 'get',
+    })
+}
+
 export function insert(actor, table) {
     return request({
         url: '/' + actor + '/insert',

@@ -114,7 +114,7 @@
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
-                        if (values.identify === this.identifyCode || values.identify !== this.identifyCode) {
+                        if (values.identify === this.identifyCode) {
                             this.loginForm.username = values.user_id;
                             this.loginForm.password = values.password;
                             login(values.actor, this.loginForm).then(res => {

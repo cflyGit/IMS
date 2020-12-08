@@ -172,7 +172,7 @@ const imsMain = {
                     {
                         name: '我的项目',
                         path: 'myProject',
-                        component: () => import('@/components/project/yan-project-audit'),
+                        component: () => import('@/components/project/yan-my-project'),
                         meta: {
                             icon: 'myProject',
                             roles: [1, 2, 3, 4],
@@ -220,7 +220,7 @@ const imsMain = {
                     {
                         name: '实习申请',
                         path: 'internShipApplication',
-                        // component: () => import('@/components/project/yan-project-audit'),
+                        component: () => import('@/components/internship/yan-internship-application'),
                         meta: {
                             icon: 'internShipApplication',
                             roles: [1, 2, 3, 4],
@@ -229,6 +229,7 @@ const imsMain = {
                     {
                         name: '实习审核',
                         path: 'internShipAudit',
+                        component: () => import('@/components/internship/yan-internship-audit'),
                         meta: {
                             icon: 'internShipAudit',
                             roles: [1, 2, 3, 4],
@@ -237,7 +238,7 @@ const imsMain = {
                     {
                         name: '我的实习',
                         path: 'myInternship',
-                        // component: () => import('@/components/project/yan-project-audit'),
+                        component: () => import('@/components/internship/yan-myinternship'),
                         meta: {
                             icon: 'myInternship',
                             roles: [1, 2, 3, 4],
@@ -248,7 +249,7 @@ const imsMain = {
             {
                 name: '数据统计',
                 path: '/statistics',
-                component: () => import('@/components/home/home'),
+                component: () => import('@/components/statistic/yan-statistic'),
                 meta: {
                     icon: 'radar-chart',
                     roles: [1, 2, 3, 4],

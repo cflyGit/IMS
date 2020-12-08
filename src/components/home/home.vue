@@ -11,17 +11,23 @@
             <div slot="nextArrow" class="custom-slick-arrow" style="right: 10px">
                 <a-icon type="right-circle" />
             </div>
-            <div><h3>1</h3></div>
-            <div><h3>2</h3></div>
-            <div><h3>3</h3></div>
-            <div><h3>4</h3></div>
+<!--            <div v-for="(item, index) in head_info" :key=item[index] :style="{backgroundImage: 'url(' + head_image[index] + ')'}" @click="toApply(head_projects[index])">-->
+            <div v-for="(item, index) in head_info" :key=item[index] @click="toApply(head_projects[index])">
+                {{item}}
+<!--                {{head_image[index]}}-->
+<!--                <img :src="head_image[index]"/>-->
+            </div>
+<!--            <div :background-image=head_image1 @click=toApply(1)><h3>{{head_info1}}</h3></div>-->
+<!--            <div :background-image=head_image2 @click="toApplay(2)"><h3>{{head_info2}}</h3></div>-->
+<!--            <div :background-image=head_image3 @click="toApply(3)"><h3>{{head_info3}}</h3></div>-->
+<!--            <div :background-image=head_image4 @click="toApply(4)"><h3>{{head_info4}}</h3></div>-->
         </a-carousel>
 
         <a-row class="row-top">
             <a-col class="wrapper" :lg="6" :md="6" :sm="12" :xl="6" :xs="12">
 <!--                文字提示气泡-->
                 <a-tooltip :mouse-enter-delay="0.5" title="Starts of ant-design">
-                    <div class="block-wrapper" >
+                    <div class="block-wrapper">
                         <a-icon class="star" type="star"></a-icon>
                         <span>{{this.star_count}}</span>
                     </div>
@@ -78,14 +84,47 @@
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+    import {IMSget} from "../../api/user";
+
     export default {
         name: "index",
 
         data() {
             return {
-                star_count: 1314,
+                star_count: "待招...",
             }
         },
+
+        mounted: function() {
+            // init
+            this.init();
+        },
+
+        computed: {
+            ...mapGetters([
+                'head_info',
+                'head_image',
+                'head_projects',
+            ])
+        },
+
+        methods: {
+            toApply(project) {
+                this.$router.push("/internship/internShipApplication");
+                this.$store.commit('update_current_insternship_project', project)
+                this.$store.commit('updateBread', "/index");
+            },
+
+            init(){
+                IMSget("home/getHead").then(res => {
+                    if (res.success === true) {
+                        console.log(res.data);
+                        this.$store.dispatch('pro_set_head', res.data);
+                    }
+                });
+            }
+        }
     }
 </script>
 
